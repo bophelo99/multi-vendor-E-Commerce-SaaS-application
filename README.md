@@ -2,7 +2,7 @@
 - A shop where sellers can create their shop and sells products online and buyers can buy products from
 
 
-## Technolgies used
+## Technolgies selection to be used
 - Microservices Architecture
 - Express.Js for Backend Framework
 - Next.Js for Frontend framework
