@@ -40,6 +40,9 @@ Creates a development server: A development server is automatically configured f
     - Cookie Parser -> parses the incoming cookies from request to JSON value.
 - use command ```npm i --save-dev @types/cors``` to save types
 
-###Common error server port already in use to fix
+### Common error server port already in use to fix
 - use the command ``` npx kill-port 8080 ```
 - using curl to test root request: ```curl http://localhost:8080```
+
+### Erro handling in middleware
+- as we staret the backend serv9ce first, we have to wait until we see something on website. first we need to set up error handler
