@@ -15,9 +15,9 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT || 6001;
 const server = app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}/api`);
+    console.log(`Auth service is running at http://localhost:${port}/api`);
 });
 
 server.on("error", (err) => {
-    console.log("Server error: ", err);
+    console.log("Server Error: ", err);
 });
