@@ -39,3 +39,7 @@ Creates a development server: A development server is automatically configured f
     - Axios is needed for fetching requests -> being a Promise-based HTTP client, functions seamlessly in both browser and Node. js environments. Its intuitive interface simplifies various HTTP operations such as GET , POST , PUT , and DELETE.
     - Cookie Parser -> parses the incoming cookies from request to JSON value.
 - use command ```npm i --save-dev @types/cors``` to save types
+
+###Common error server port already in use to fix
+- use the command ``` npx kill-port 8080 ```
+- using curl to test root request: ```curl http://localhost:8080```
