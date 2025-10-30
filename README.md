@@ -191,3 +191,7 @@ Creates a development server: A development server is automatically configured f
     - 3. run prisma db pull to turn your database schema into prisma schema
     - 4. run prisma generate to generate the prisma client. you can then start querying database
     - 5. Tip: expand how you can extend ORM with scalable pooling, global caching, and real-time  database events.
+
+### set up database model
+- password is optional since users can sign up using social authentican method with no password
+- use ``` npx prisma db push ``` -> to add updates into our local prisma db, in the node modules prisma client so that we can use it
