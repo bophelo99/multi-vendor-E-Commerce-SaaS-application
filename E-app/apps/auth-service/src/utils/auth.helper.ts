@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { ValidationError } from "../../../../packages/error-handler";
 import redis from "../../../../packages/libs/redis"
 import { sendEmail } from "../utils/sendMail";
+import { NextFunction } from "express";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -18,7 +19,7 @@ export const validateRegistrationData = (data: any, userType: "user" | "seller")
         throw new ValidationError("Invalid email format");
     }
         
-}
+};
 
 export const checkOtpRestrictions = async (email: string, next: Function) => {
     //use radius to store short term data in memory
@@ -26,10 +27,28 @@ export const checkOtpRestrictions = async (email: string, next: Function) => {
     if(await redis.get(`otp_lock: ${email}`)){
         return next(new ValidationError("Too many incorrect OTP attempts. Account locked. Please request a new OTP after 30 minutes."));
         }
+    //if user is requesting otp too many times in a short period
+    if(await redis.get(`otp_spam_lock: ${email}`)){
+        return next(new ValidationError("Too many OTP requests. Please try again after 60 minutes."));
+    }
+    //OTP sent will stay in database for 1 minutes, before user can request another OTP
+    if(await redis.get(`otp_cooldown: ${email}`)){
+        return next(new ValidationError("OTP already sent. Please wait for 1 minute before requesting another OTP."));
+    }
 };
 
+export const trackOtpRequests = async (email: string, next:NextFunction) => {
+    //add otp request counts, check if otp key already in database  
+    const otpRequestkey = `otp_request_count: ${email}`;
+    let otpRequests = parseInt((await redis.get(otpRequestkey)) || "0");
+    if(otpRequests >= 2){
+        await redis.set(`otp_spam_lock: ${email}`, "locked", "EX", 3600); //lock for 60 minutes
+    }
 
- //sending OTP to user email
+    //tracking requests for 1 hour
+    await redis.set(otpRequestkey, otpRequests + 1, "EX", 3600); //expire in 60 minutes
+};
+
 export const sendOtp = async (name: String, email: string, template: string) => {
     //generate 4 digit OTP
     const otp = crypto.randomInt(1000, 9999).toString();
@@ -41,4 +60,4 @@ export const sendOtp = async (name: String, email: string, template: string) => 
     await redis.set(`otp_cooldown: ${email}`, "true", "EX", 60); //track otp attempts for this email
    
 
-}
+};
