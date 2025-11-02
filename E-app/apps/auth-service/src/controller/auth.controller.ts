@@ -8,7 +8,7 @@ import { sendOtp } from "../utils/auth.helper";
 
 
 //register a new user (seller or buyer)
-export const userRegister = async (req: Request, res: Response, next: NextFunction) => {
+export const userRegistration = async (req: Request, res: Response, next: NextFunction) => {
     //validate registration data form 
     validateRegistrationData(req.body, "user");
 
