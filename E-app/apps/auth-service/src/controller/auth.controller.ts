@@ -16,7 +16,7 @@ export const userRegistration = async (req: Request, res: Response, next: NextFu
     const {name, email} = req.body;
 
     //check for existing users in database
-    const existingUser = await prisma.users.findUnique({ where: email });
+    const existingUser = await prisma.users.findUnique({ where: { email } });
 
     try{
         if(existingUser) {
