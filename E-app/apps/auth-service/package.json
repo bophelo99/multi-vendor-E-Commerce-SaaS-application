@@ -1,5 +1,5 @@
 {
-  "name": "@./auth-service",
+  "name": "@e-app/auth-service",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -8,8 +8,8 @@
   "nx": {
     "targets": {
       "name": "auth-service",
-      "projectTpe": "application",
-      "sourceRoot": "auth-service/src",
+      "projectType": "application",
+      "sourceRoot": "apps/auth-service/src",
       "serve": {
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",
@@ -17,15 +17,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "auth-service:build",
+          "buildTarget": "@e-app/auth-service:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "auth-service:build:development"
+            "buildTarget": "@e-app/auth-service:build:development"
           },
           "production": {
-            "buildTarget": "auth-service:build:production"
+            "buildTarget": "@e-app/auth-service:build:production"
           }
         }
       },
