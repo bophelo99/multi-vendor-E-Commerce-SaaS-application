@@ -7,9 +7,9 @@ module.exports = {
   },
   resolve: {
     alias: {
-        "@packages": resolve(__dirname, '../../packages/'),
+        "@packages": resolve(__dirname, "../../packages/" ),
     },
-    extension: [".ts", ".js"],
+    extensions: [".ts", ".js"],
   },
   plugins: [
     new NxAppWebpackPlugin({
