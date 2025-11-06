@@ -1,10 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { validateRegistrationData } from "../utils/auth.helper";
+import { validateRegistrationData, checkOtpRestrictions, verifyOtp, trackOtpRequests, sendOtp } from "../utils/auth.helper";
 import prisma from "@packages/libs/prisma";
 import { ValidationError } from "@packages/error-handler";
-import { checkOtpRestrictions } from "../utils/auth.helper";
-import { trackOtpRequests } from "../utils/auth.helper";
-import { sendOtp } from "../utils/auth.helper";
+import bcrypt from "bcryptjs";
 
 
 //register a new user (seller or buyer)
@@ -37,4 +35,33 @@ export const userRegistration = async (req: Request, res: Response, next: NextFu
     } catch (error) {
         return next(error);
     }
-}
+};
+
+//verify user OTP and activate account after user received verification email with OTP code and succefful entered
+export const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const {email, otp, password, name} = req.body;
+        if(!email || !otp || !password || !name){
+            throw new ValidationError("Missing required fields");
+        }
+
+        const existingUser = await prisma.users.findUnique({where: { email }});
+        if(existingUser){
+            return next (new ValidationError("User with this email already exists, try again using a different email."));
+        }
+
+        await verifyOtp(email, otp, next);
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await prisma.users.create({
+            data: {name, email, password: hashedPassword},
+        });
+
+        res.status(200).json({
+            success: true,
+            messge: "User registered successfully"
+        });
+    } catch(error){
+        return next(error);
+    }
+};

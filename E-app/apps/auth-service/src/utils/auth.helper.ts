@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { ValidationError } from "@packages/error-handler";
-import redis from "@packages/libs/redis"
+import redis from "@packages/libs/redis";
 import { sendEmail } from "../utils/sendMail";
 import { NextFunction } from "express";
 
@@ -21,7 +21,7 @@ export const validateRegistrationData = (data: any, userType: "user" | "seller")
         
 };
 
-export const checkOtpRestrictions = async (email: string, next: Function) => {
+export const checkOtpRestrictions = async (email: string, next: NextFunction) => {
     //use radius to store short term data in memory
     //if entering otp wrong three time, then assume youre hacking the account, and we lock otp
     if(await redis.get(`otp_lock: ${email}`)){
@@ -60,4 +60,26 @@ export const sendOtp = async (name: String, email: string, template: string) => 
     await redis.set(`otp_cooldown: ${email}`, "true", "EX", 60); //track otp attempts for this email
    
 
+};
+
+export const verifyOtp = async (email: string, otp: string, next: NextFunction ) => {
+    // get already stored otp from rdis database
+    const storedOtp = await redis.get(`otp: ${email}`);
+
+    if(!storedOtp){
+        return next (new ValidationError("OTP has expired or is invalid. Please request a new OTP."));
+    }
+
+    const failedAttemptsKey = `otp_attempts: ${email}`;
+    let failedAttempts = parseInt((await redis.get(failedAttemptsKey)) || "0");
+    if(storedOtp !== otp){
+        if(failedAttempts>=2){
+            await redis.set(`otp_lock: ${email}`, "locked", "EX", 1800); //lock for 30 minutes
+            await redis.del(`otp: ${email}`, failedAttemptsKey); //delete existing otp
+            return next (new ValidationError("Too many failed attempts. Please try again after an hour."));
+        }
+        await redis.set(failedAttemptsKey, failedAttempts + 1, "EX", 300 );
+        return next (new ValidationError(`Invalid OTP. You have ${2 - failedAttempts} attempts left.`));
+    }
+    await redis.del(`otp: ${email}`, failedAttemptsKey); //delete existing otp and failed attempts if otp is correct
 };

@@ -202,3 +202,8 @@ Creates a development server: A development server is automatically configured f
 - application restrictions for users: if user is doing email spamming with the email and makes application slow
 - use ``` npm i ioredis nodemailer dotenv ejs ``` to install redis
 - use  ``` npm i swagger-autogen``` to install swagger library
+- use ``` npm i bcryptjs jsonwebtoken ``` to install 
+
+
+## Branches
+- verifyUserOtp
