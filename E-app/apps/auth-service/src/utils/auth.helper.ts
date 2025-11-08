@@ -108,3 +108,22 @@ export const handleForgotPassword = async (req: Request, res: Response, next: Ne
         return next(error);
     }
 };
+
+export const verifyForgotPasswordOtp = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+
+        const {email,otp} = req.body;
+        if(!email || !otp){
+            throw new ValidationError("Missing required fields");
+        }
+        await verifyOtp(email, otp, next);
+        res.status(200).json({
+            success: true,
+            message: "Email verified successfully, reset your password now"
+        });
+
+    } catch(error){
+        return next(error);
+    }   
+
+};

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { validateRegistrationData, checkOtpRestrictions, verifyOtp, trackOtpRequests, sendOtp, handleForgotPassword } from "../utils/auth.helper";
+import { validateRegistrationData, checkOtpRestrictions, verifyOtp, trackOtpRequests, sendOtp, handleForgotPassword, verifyForgotPasswordOtp } from "../utils/auth.helper";
 import prisma from "@packages/libs/prisma";
 import { AuthError, ValidationError } from "@packages/error-handler";
 import bcrypt from "bcryptjs";
@@ -114,10 +114,15 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
     await handleForgotPassword(req, res, next, `user`);
 };
 
+//verify OTP controller (for forgot password)
+export const verifyForgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+    await verifyForgotPasswordOtp(req, res, next);
+};
+
 //reset password controller (after verifying OTP, allow user to reset password)
 export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const { email, otp, newPassword } = req.body;
+        const { email, newPassword } = req.body;
         if(!email || !newPassword){
             return next (new ValidationError("Missing required fields"));
         }
