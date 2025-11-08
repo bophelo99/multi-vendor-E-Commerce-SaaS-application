@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { validateRegistrationData, checkOtpRestrictions, verifyOtp, trackOtpRequests, sendOtp } from "../utils/auth.helper";
+import { validateRegistrationData, checkOtpRestrictions, verifyOtp, trackOtpRequests, sendOtp, handleForgotPassword } from "../utils/auth.helper";
 import prisma from "@packages/libs/prisma";
 import { AuthError, ValidationError } from "@packages/error-handler";
 import bcrypt from "bcryptjs";
@@ -67,6 +67,7 @@ export const verifyUser = async (req: Request, res: Response, next: NextFunction
     }
 };
 
+//user login controller
 export const userLogin = async (req: Request, res: Response, next: NextFunction) => {
     try{
         const {email, password} = req.body;
@@ -106,4 +107,9 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
     } catch(error){
         return next(error);
     }
+};
+
+//forgot password controller (send OTP to email to reset password)
+export const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+    await handleForgotPassword(req, res, next, `user`);
 };

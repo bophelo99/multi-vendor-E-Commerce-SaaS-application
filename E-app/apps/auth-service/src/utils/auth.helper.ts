@@ -2,7 +2,8 @@ import crypto from "crypto";
 import { ValidationError } from "@packages/error-handler";
 import redis from "@packages/libs/redis";
 import { sendEmail } from "../utils/sendMail";
-import { NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
+import prisma from "@packages/libs/prisma";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -80,4 +81,30 @@ export const sendOtp = async (name: String, email: string, template: string) => 
     await redis.set(`otp: ${email}`, otp, "EX", 300); //300 seconds = 5 minutes
     //how many times user is sending the OTP requests, so you have to wait for 1 minute before sending another OTP
     await redis.set(`otp_cooldown: ${email}`, "true", "EX", 60); //track otp attempts for this email
+};
+
+export const handleForgotPassword = async (req: Request, res: Response, next: NextFunction, userType: "user" | "seller") => {
+    try{
+        const { email } = req.body;
+        if(!email){
+            throw new ValidationError("Email is required");
+        }
+        //find exisiting user/seller in database
+        const existingUser = userType === "user" && await prisma.users.findUnique({where: { email }});
+        if(!existingUser){
+            throw new ValidationError("User with email does not exist");
+        }
+        //check our OTP restrictions
+        await checkOtpRestrictions(email, next);
+        //track OTP requests
+        await trackOtpRequests(email, next);
+        // send OTP, email and template
+        await sendOtp(existingUser.name, email, "forgot-password-mail");
+        //send response back to client
+        res.status(200).json({ 
+            message: "Please check your email for the OTP code to reset your password."
+        });
+    } catch(error){
+        return next(error);
+    }
 };
