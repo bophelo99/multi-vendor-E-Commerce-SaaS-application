@@ -82,7 +82,19 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
         if(!isPasswordValid){
             return next (new AuthError("Invalid email or password"));
         }
-        
+        //Generate session or token logic would go here
+        const accessToken = jwt.sign(
+            { id: existingUser.id, role: "user" }, 
+            process.env.ACCESS_TOKEN_SECRET as string, 
+            { expiresIn: "15m", }
+        );
+
+        const arefreshToken = jwt.sign(
+            { id: existingUser.id, role: "user" }, 
+            process.env.REFRESH_TOKEN_SECRET as string, 
+            { expiresIn: "7d", }
+        );
+        //store refresh abd access token into database in an httponly secure cookie
 
 
     } catch(error){
