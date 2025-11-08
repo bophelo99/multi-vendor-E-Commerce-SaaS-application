@@ -4,6 +4,7 @@ import prisma from "@packages/libs/prisma";
 import { AuthError, ValidationError } from "@packages/error-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { setCookie } from "../utils/cookies/setCookie";
 
 //register a new user (seller or buyer)
 export const userRegistration = async (req: Request, res: Response, next: NextFunction) => {
@@ -94,9 +95,14 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
             process.env.REFRESH_TOKEN_SECRET as string, 
             { expiresIn: "7d", }
         );
-        //store refresh abd access token into database in an httponly secure cookie
+        //store refresh and access token into database in an httponly secure cookie
+        setCookie(res, "refreshToken", arefreshToken);
+        setCookie(res, "accessToken", accessToken);
 
-
+        res.status(200).json({
+            message: "User logged in successfully",
+            existingUser: { id: existingUser.id, name: existingUser.name, email: existingUser.email },
+        });
     } catch(error){
         return next(error);
     }
