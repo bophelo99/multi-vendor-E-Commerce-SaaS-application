@@ -203,7 +203,3 @@ Creates a development server: A development server is automatically configured f
 - use ``` npm i ioredis nodemailer dotenv ejs ``` to install redis
 - use  ``` npm i swagger-autogen``` to install swagger library
 - use ``` npm i bcryptjs jsonwebtoken ``` to install 
-
-
-## Branches
-- verifyUserOtp
