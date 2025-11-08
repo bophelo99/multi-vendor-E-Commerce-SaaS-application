@@ -113,3 +113,40 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
 export const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
     await handleForgotPassword(req, res, next, `user`);
 };
+
+//reset password controller (after verifying OTP, allow user to reset password)
+export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const { email, otp, newPassword } = req.body;
+        if(!email || !newPassword){
+            return next (new ValidationError("Missing required fields"));
+        }
+        //check user existence in DB
+        const existingUser = await prisma.users.findUnique({where: { email }});
+        if(!existingUser){
+            return next (new ValidationError("User with email does not exist"));
+        }
+        //verify OTP
+
+        //compare passwords
+        const isSamePassword = await bcrypt.compare(newPassword, existingUser.password!);
+        if(isSamePassword){
+            return next (new ValidationError("New password must be different from the old password"));
+        }
+
+        //hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        //update password in database
+        await prisma.users.update({
+            where: { email },
+            data: { password: hashedPassword },
+        });
+        res.status(200).json({
+            message: "Password reset successfully",
+        });
+
+    } catch(error){
+        return next(error);
+    }
+};
