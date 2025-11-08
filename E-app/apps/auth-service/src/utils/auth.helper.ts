@@ -49,6 +49,28 @@ export const trackOtpRequests = async (email: string, next:NextFunction) => {
     await redis.set(otpRequestkey, otpRequests + 1, "EX", 3600); //expire in 60 minutes
 };
 
+export const verifyOtp = async (email: string, otp: string, next: NextFunction ) => {
+    // get already stored otp from rdis database
+    const storedOtp = await redis.get(`otp: ${email}`);
+
+    if(!storedOtp){
+        throw new ValidationError("OTP has expired or is invalid. Please request a new OTP.");
+    }
+
+    const failedAttemptsKey = `otp_attempts: ${email}`;
+    let failedAttempts = parseInt((await redis.get(failedAttemptsKey)) || "0");
+    if(storedOtp !== otp){
+        if(failedAttempts>=2){
+            await redis.set(`otp_lock: ${email}`, "locked", "EX", 1800); //lock for 30 minutes
+            await redis.del(`otp: ${email}`, failedAttemptsKey); //delete existing otp
+            throw new ValidationError("Too many failed attempts. Please try again after an hour.");
+        }
+        await redis.set(failedAttemptsKey, failedAttempts + 1, "EX", 300 );
+        throw new ValidationError(`Invalid OTP. You have ${2 - failedAttempts} attempts left.`);
+    }
+    await redis.del(`otp: ${email}`, failedAttemptsKey); //delete existing otp and failed attempts on successful verification
+};
+
 export const sendOtp = async (name: String, email: string, template: string) => {
     //generate 4 digit OTP
     const otp = crypto.randomInt(1000, 9999).toString();
@@ -58,28 +80,4 @@ export const sendOtp = async (name: String, email: string, template: string) => 
     await redis.set(`otp: ${email}`, otp, "EX", 300); //300 seconds = 5 minutes
     //how many times user is sending the OTP requests, so you have to wait for 1 minute before sending another OTP
     await redis.set(`otp_cooldown: ${email}`, "true", "EX", 60); //track otp attempts for this email
-   
-
-};
-
-export const verifyOtp = async (email: string, otp: string, next: NextFunction ) => {
-    // get already stored otp from rdis database
-    const storedOtp = await redis.get(`otp: ${email}`);
-
-    if(!storedOtp){
-        return next (new ValidationError("OTP has expired or is invalid. Please request a new OTP."));
-    }
-
-    const failedAttemptsKey = `otp_attempts: ${email}`;
-    let failedAttempts = parseInt((await redis.get(failedAttemptsKey)) || "0");
-    if(storedOtp !== otp){
-        if(failedAttempts>=2){
-            await redis.set(`otp_lock: ${email}`, "locked", "EX", 1800); //lock for 30 minutes
-            await redis.del(`otp: ${email}`, failedAttemptsKey); //delete existing otp
-            return next (new ValidationError("Too many failed attempts. Please try again after an hour."));
-        }
-        await redis.set(failedAttemptsKey, failedAttempts + 1, "EX", 300 );
-        return next (new ValidationError(`Invalid OTP. You have ${2 - failedAttempts} attempts left.`));
-    }
-    await redis.del(`otp: ${email}`, failedAttemptsKey); //delete existing otp and failed attempts if otp is correct
 };

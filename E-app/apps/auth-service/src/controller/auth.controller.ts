@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { validateRegistrationData, checkOtpRestrictions, verifyOtp, trackOtpRequests, sendOtp } from "../utils/auth.helper";
 import prisma from "@packages/libs/prisma";
-import { ValidationError } from "@packages/error-handler";
+import { AuthError, ValidationError } from "@packages/error-handler";
 import bcrypt from "bcryptjs";
-
+import jwt from "jsonwebtoken";
 
 //register a new user (seller or buyer)
 export const userRegistration = async (req: Request, res: Response, next: NextFunction) => {
@@ -30,7 +30,7 @@ export const userRegistration = async (req: Request, res: Response, next: NextFu
 
     //send response back to client
     res.status(200).json({ 
-        message: "Please verify email account. Check your email for the OTP code to verify your account." 
+        message: "Please verify email account. Check your email for the OTP code to verify your account."
     });
     } catch (error) {
         return next(error);
@@ -61,6 +61,30 @@ export const verifyUser = async (req: Request, res: Response, next: NextFunction
             success: true,
             messge: "User registered successfully"
         });
+    } catch(error){
+        return next(error);
+    }
+};
+
+export const userLogin = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const {email, password} = req.body;
+        if(!email || !password){
+            throw new ValidationError("Missing required fields");
+        }
+
+        const existingUser = await prisma.users.findUnique({where: { email }});
+        if(!existingUser){
+            return next (new AuthError("User with email does not exist"));
+        }
+        //verify password
+        const isPasswordValid = await bcrypt.compare(password, existingUser.password!);
+        if(!isPasswordValid){
+            return next (new AuthError("Invalid email or password"));
+        }
+        
+
+
     } catch(error){
         return next(error);
     }
