@@ -1,7 +1,9 @@
 import React from 'react';
 import Link from "next/link";
-import { HeartIcon, Search } from "lucide-react";
+import { ShoppingCart, HeartIcon, Search } from "lucide-react";
 import ProfileIcon from '../../../assets/svgs/profile-icon';
+import HeaderBottom from './header-bottom';
+
 
 
 const Header = () => {
@@ -10,7 +12,7 @@ const Header = () => {
             <div className="w-[80%] py-5 m-auto flex items-center justify-between">
                 <div>
                     <Link href={"/"}>
-                        <span className="text-3xl font=[500]">Eshop</span> 
+                        <span className="text-3xl font=[500]">ShopVerse</span> 
                     </Link>
                 </div>
                 <div className="w-[50%] relative"> 
@@ -34,10 +36,21 @@ const Header = () => {
                     <div className="flex items-center gap-5">
                         <Link href={"/wishlist"} className="relative">
                          <HeartIcon />
+                         <div className="w-6 h-6 border-2 border-white bg-red-500 rounded-full flex items-center justify-center absolute top-[-10px] right-[-10px]">
+                            <span className="text-white font-medium text-sm">0</span>
+                         </div>
+                        </Link>
+                         <Link href={"/cart"} className="relative">
+                         <ShoppingCart />
+                         <div className="w-6 h-6 border-2 border-white bg-red-500 rounded-full flex items-center justify-center absolute top-[-10px] right-[-10px]">
+                            <span className="text-white font-medium text-sm">0</span>
+                         </div>
                         </Link>
                     </div>
                 </div>
             </div>
+            <div className="border-b border-b-slate-200"/>
+            <HeaderBottom />
         </div>
     );
 };
