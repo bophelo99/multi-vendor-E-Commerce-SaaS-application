@@ -1,6 +1,6 @@
 'use client';
 
-import { AlignLeft } from "lucide-react";
+import { AlignLeft, ChevronDown } from "lucide-react";
 import React, {useEffect, useState} from "react";
 
 const HeaderBottom = () => {
@@ -28,11 +28,20 @@ const HeaderBottom = () => {
                 <div className={`w-[260px] ${isSticky && '-mb-2'} cursor-pointer flex items-center justify-between px-5 h-[50px] bg-[#3489ff]`}
                 onClick = {()=> setShow(!show)}
                 >
-                    <div className="flec items-center gap-2">
+                    <div className="flex items-center gap-2">
                         <AlignLeft color="white" />
                         <span className="text-white font-medium">All Departments</span>
                     </div>
+                    <ChevronDown color="white" />
                 </div>
+
+                {/*Dropdown Menu*/}
+                {show && (
+                    <div className={`absolute left-0 ${isSticky ? "top-[70px]" : "top-[50px]"} 
+                    w-[260px] h-[400px] bg-[#f5f5f5]`}>
+
+                    </div>
+                )}
             </div>
         </div>
     );
