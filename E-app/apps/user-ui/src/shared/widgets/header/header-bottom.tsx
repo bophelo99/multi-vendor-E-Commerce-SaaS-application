@@ -2,6 +2,8 @@
 
 import { AlignLeft, ChevronDown } from "lucide-react";
 import React, {useEffect, useState} from "react";
+import {navItems} from "../../../configs/constants";
+import Link from "next/link";
 
 const HeaderBottom = () => {
     const [show, setShow] = useState(false);
@@ -42,6 +44,17 @@ const HeaderBottom = () => {
 
                     </div>
                 )}
+
+                {/*Navigation links*/}
+                <div className="flex items-center">
+                    { navItems.map((i:NavItemsTypes,index:number) => (
+                        <Link className="px-5 font-medium text-lg" 
+                        href={i.href} 
+                        key={index}>
+                            {i.title}
+                        </Link>
+                    )) }
+                </div>
             </div>
         </div>
     );
