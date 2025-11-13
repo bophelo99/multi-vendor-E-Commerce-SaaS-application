@@ -12,7 +12,7 @@ const HeaderBottom = () => {
     //track scroll position
     useEffect(()=>{
         const handleScroll = () => {
-            if(window.screenY > 100){
+            if(window.scrollY > 100){
                 setIsSticky(true);
             } else {
                 setIsSticky(false);
@@ -54,6 +54,9 @@ const HeaderBottom = () => {
                             {i.title}
                         </Link>
                     )) }
+                </div>
+                <div>
+                    
                 </div>
             </div>
         </div>

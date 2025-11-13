@@ -12,7 +12,7 @@ const Header = () => {
             <div className="w-[80%] py-5 m-auto flex items-center justify-between">
                 <div>
                     <Link href={"/"}>
-                        <span className="text-3xl font=[500]">ShopVerse</span> 
+                        <span className="text-3xl font=[500]">V-Shop</span> 
                     </Link>
                 </div>
                 <div className="w-[50%] relative"> 
