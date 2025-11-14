@@ -93,7 +93,11 @@ const Login = () => {
                     >
                     {passwordVisible ? <Eye/> : <EyeOff/>}
                     </button>
-
+                    {errors.password && (
+                        <p className="text-red-500 text-sm">
+                            {String(errors.password.message)}
+                        </p>
+                    )}
                     </div>
                 </form>
             </div>
