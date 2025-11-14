@@ -16,7 +16,7 @@ const Login = () => {
     // set useState hooks
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [serverError, setSeverError] = useState<string | null>(null);
-    const [canResend, setCanResend] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
 
     // set router from next navigation
     const router = useRouter();
