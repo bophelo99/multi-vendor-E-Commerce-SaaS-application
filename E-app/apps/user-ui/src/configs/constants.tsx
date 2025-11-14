@@ -16,7 +16,7 @@ export const navItems:NavItemsTypes[] = [
         href: "/offers",
     },
     {
-        title: "Register as Seller",
+        title: "Become a Seller",
         href: "/become-seller",
     },
 ];

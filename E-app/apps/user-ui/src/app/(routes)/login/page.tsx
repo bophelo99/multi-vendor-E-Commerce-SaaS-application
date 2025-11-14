@@ -99,6 +99,23 @@ const Login = () => {
                         </p>
                     )}
                     </div>
+                    <div className="flex justify-between items-center my-4">
+                        <label className="flex items-center text-gray-600">
+                            <input type="checkbox" className="mr-2" checked={rememberMe} onChange={() =>
+                            setRememberMe(!rememberMe)
+                            }/>
+                            Remember me
+                        </label>
+                        <Link href={"/forgot-password"} className="text-blue-500 text-sm">
+                            Forgot Password?
+                        </Link>
+                    </div>
+                    <button type="submit" className="w-full text-lg cursor-pointer bg-black text-white py-2 rounded-lg">
+                        Login
+                    </button>
+                    {serverError && (
+                        <p className="text-red-500 text-sm mt-2">{serverError}</p>
+                    )}
                 </form>
             </div>
         </div>
