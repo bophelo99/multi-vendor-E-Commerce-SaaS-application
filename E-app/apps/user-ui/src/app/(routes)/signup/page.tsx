@@ -8,6 +8,7 @@ import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 
 type FormData = {
+    name: string;
     email: string;
     password: string;
 };
@@ -54,6 +55,20 @@ const Signup = () => {
                     <div className="flex-1 border-t border-gray-300"/>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    {/*Name*/}
+                    <label className="block text-gray-700 mb-1">Name</label>
+                    <input type="text" 
+                     placeholder="bophilo"
+                     className="w-full p-2 border border-gray-300 outline-0 !rounded  mb-1"
+                     {... register("name", {
+                        required: "Name is required",
+                     })}
+                    />
+                    {errors.email && (
+                        <p className="text-red-500 text-sm">
+                            {String(errors.email.message)}
+                        </p>
+                    )}
                     {/*email*/}
                     <label className="block text-gray-700 mb-1">Email</label>
                     <input type="email" 
@@ -99,18 +114,7 @@ const Signup = () => {
                         </p>
                     )}
                     </div>
-                    <div className="flex justify-between items-center my-4">
-                        <label className="flex items-center text-gray-600">
-                            <input type="checkbox" className="mr-2" checked={rememberMe} onChange={() =>
-                            setRememberMe(!rememberMe)
-                            }/>
-                            Remember me
-                        </label>
-                        <Link href={"/forgot-password"} className="text-blue-500 text-sm">
-                            Forgot Password?
-                        </Link>
-                    </div>
-                    <button type="submit" className="w-full text-lg cursor-pointer bg-black text-white py-2 rounded-lg">
+                    <button type="submit" className="w-full text-lg cursor-pointer bg-black mt-6 text-white py-2 rounded-lg">
                         Signup
                     </button>
                     {serverError && (
