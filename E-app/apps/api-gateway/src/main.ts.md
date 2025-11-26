@@ -94,6 +94,8 @@ in this code, my gateway:
 
 ### 2. Imports the CORS middleware.
 - CORS controls which domains can access your backend from a browser (Cross-Origin Resource Sharing). Without this, the browser blocks API calls from a different domain/port.
+- CORS middleware refers to a software component, often integrated into web frameworks or servers, that facilitates Cross-Origin Resource Sharing (CORS). CORS is an HTTP-header based mechanism enabling a server to indicate which origins (domains, schemes, or ports) other than its own are allowed to load resources from it. 
+- Essentially, CORS middleware helps manage and respond to cross-origin requests by adding the necessary CORS headers to server responses. These headers communicate to the browser whether a cross-origin request is permitted and under what conditions (e.g., allowed origins, HTTP methods, headers, credentials).
 
 ### 3. import proxy from "express-http-proxy";
 - this Imports a package that allows your Express server to act as a reverse proxy. Used so / routes on this server forward to another server (in this case: port 6001). The proxy receives the incoming request → sends it to another server → returns the response.
