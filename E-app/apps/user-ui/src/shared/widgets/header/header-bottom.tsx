@@ -34,7 +34,7 @@ const HeaderBottom = () => {
                         <AlignLeft color="white" />
                         <span className="text-white font-medium">All Departments</span>
                     </div>
-                    <ChevronDown color="blue" />
+                    <ChevronDown color="white" />
                 </div>
 
                 {/*Dropdown Menu*/}
