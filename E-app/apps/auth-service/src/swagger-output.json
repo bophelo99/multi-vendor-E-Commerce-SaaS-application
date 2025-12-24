@@ -22,10 +22,13 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "example": "bophilo"
                 },
                 "email": {
-                  "example": "any"
+                  "example": "ntsemibophilo@gmail.com"
+                },
+                "password": {
+                  "example": "12345678"
                 }
               }
             }
@@ -82,10 +85,10 @@
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "example": "ntsemibophilo@gmail.com"
                 },
                 "password": {
-                  "example": "any"
+                  "example": "12345678"
                 }
               }
             }

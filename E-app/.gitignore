@@ -51,6 +51,7 @@ apps/*/.env
 test-output
 
 /generated/prisma
+/passwords.txt
 
 # Next.js
 .next

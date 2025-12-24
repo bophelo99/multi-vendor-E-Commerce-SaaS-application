@@ -203,3 +203,6 @@ Creates a development server: A development server is automatically configured f
 - use ``` npm i ioredis nodemailer dotenv ejs ``` to install redis
 - use  ``` npm i swagger-autogen``` to install swagger library
 - use ``` npm i bcryptjs jsonwebtoken ``` to install 
+
+### Error with DEAMON
+- ``$env:NX_DEAMON = "false" ``, ``NX_DEAMON=false``, ``$env:NX_PLUGIN_NO_TIMEOUTS = "true"``
