@@ -206,8 +206,3 @@ Creates a development server: A development server is automatically configured f
 
 ### Error with DEAMON
 - ``$env:NX_DEAMON = "false" ``, ``NX_DEAMON=false``, ``$env:NX_PLUGIN_NO_TIMEOUTS = "true"``
-
-## FRONT END
-
-- npm i lucide-react
-- npm i next/font
