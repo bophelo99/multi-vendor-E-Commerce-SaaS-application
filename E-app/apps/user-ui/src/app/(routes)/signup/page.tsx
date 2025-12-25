@@ -17,7 +17,7 @@ const Signup = () => {
     // set useState hooks
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [serverError, setSeverError] = useState<string | null>(null);
-    const [showOtp, setShowOtp] = useState(false);
+    const [showOtp, setShowOtp] = useState(true);
     const [canResend, setCanResend] = useState(true);
     const [timer, setTimer] = useState(60);
     const [otp, setOtp] = useState(["", "", "", ""]); // 4 digit code
@@ -43,12 +43,15 @@ const Signup = () => {
         if(value && index  < inputRefs.current.length - 1){
             inputRefs.current[index+1]?.focus();
         }
-    }
+    };
 
     //handle backspace to go back into previous otp backspace
     const handleOtpkeyDown = (index:number, e:React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key == "Backspace" && !otp[index] && index > 0 ){
+            inputRefs.current[index - 1]?.focus();
+        }
+    };
 
-    }
   return (
     <div className="w-full py-10 min-h-[85vh] bg-[f1f1f1]">
         <h1 className="text-4xl font-poppins font-semibold text-black text-center"> 
@@ -145,16 +148,17 @@ const Signup = () => {
                 </form>
                 ) : (
                     <div>
-                        <h3 className="text-xl font-semibold text-center mb-4">Enter verification code</h3>\
+                        <h3 className="text-xl font-semibold text-center mb-4">Enter verification code</h3>
                         <div className="justify-center flex gap-6">
                             {otp ?.map((digit,index)=>(
                                 <input key={index} type="text" ref={(el)=> {
                                   if (el) inputRefs.current[index] = el;
                                 }}
                                 maxLength={1}
-                                className="w-12 h-2 text-center border border-gray-300 outline-none !rounded"
+                                className="w-12 h-12 text-center border border-gray-500 outline-none !rounded"
                                 value={digit}
                                 onChange={(e) => handleOtpChange(index,e.target.value)}
+                                onKeyDown={(e) => handleOtpkeyDown(index, e)}
                                 />
                             ))}
                         </div>
