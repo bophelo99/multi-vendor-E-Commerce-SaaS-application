@@ -25,14 +25,14 @@ const HeaderBottom = () => {
 
     return (
         <div className={`w-full transition-all duration-300 ${isSticky ? "fixed top-0 left-0 z-[100] bg-white shadow-lg" : "relative"}`}>
-            <div className={`w-[80%] relative m-auto flex items-center justify-between ${isSticky ? `pt-3` : "py-0"}`}>
+            <div className={`w-[80%] relative m-auto flex items-center justify-between ${isSticky ? `pt-2` : "py-0"}`}>
                 {/*Add all dropdowns*/}
                 <div className={`w-[260px] ${isSticky && '-mb-2'} cursor-pointer flex items-center justify-between px-5 h-[50px] bg-[#3489ff]`}
                 onClick = {()=> setShow(!show)}
                 >
                     <div className="flex items-center gap-2">
                         <AlignLeft color="white" />
-                        <span className="text-white font-medium">All Departments</span>
+                        <span className="text-white font-medium">All Categories</span>
                     </div>
                     <ChevronDown color="white" />
                 </div>
@@ -40,7 +40,7 @@ const HeaderBottom = () => {
                 {/*Dropdown Menu*/}
                 {show && (
                     <div className={`absolute left-0 ${isSticky ? "top-[70px]" : "top-[50px]"} 
-                    w-[260px] h-[400px] bg-[#f5f5f5]`}>
+                    w-[260px] h-[400px] bg-[#3489ff]`}>
 
                     </div>
                 )}

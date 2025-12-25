@@ -29,7 +29,7 @@ const Login = () => {
     };
 
   return (
-    <div className="w-full py-10 min-h-[85vh] bg-[f1f1f1]">
+    <div className="w-full py-10 min-h-[85vh]">
         <h1 className="text-4xl font-poppins font-semibold text-black text-center"> 
             Login
         </h1>

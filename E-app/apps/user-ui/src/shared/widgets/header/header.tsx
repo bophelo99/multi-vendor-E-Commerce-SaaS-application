@@ -49,7 +49,7 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            <div className="border-b border-b-slate-200"/>
+            <div className="border-b border-b-slate-500"/>
             <HeaderBottom />
         </div>
     );
