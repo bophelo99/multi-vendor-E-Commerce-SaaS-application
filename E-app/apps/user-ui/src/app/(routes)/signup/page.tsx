@@ -52,6 +52,8 @@ const Signup = () => {
         }
     };
 
+    const  resendOtp =  () => {};
+
   return (
     <div className="w-full py-10 min-h-[85vh] bg-[f1f1f1]">
         <h1 className="text-4xl font-poppins font-semibold text-black text-center"> 
@@ -162,6 +164,18 @@ const Signup = () => {
                                 />
                             ))}
                         </div>
+                        <button className="w-full h-12 mt-4 text-lg cursor-pointer bg-blue-500 text-white py-2 rounded-lg">
+                           Verify
+                        </button>
+                        <p className="text-center text-sm mt-4">
+                            {canResend ? (
+                                <button onClick={resendOtp} className="text-blue-500 cursor-pointer">
+                                    Resend Verification Code
+                                </button>
+                            ):(
+                                `Resend OTP in ${timer}s`
+                            )}
+                        </p>
                     </div>
                 )}
             </div>
