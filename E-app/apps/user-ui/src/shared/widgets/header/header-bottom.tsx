@@ -32,15 +32,15 @@ const HeaderBottom = () => {
                 >
                     <div className="flex items-center gap-2">
                         <AlignLeft color="white" />
-                        <span className="text-white font-medium">All Departments</span>
+                        <span className="text-white font-medium">All Categories</span>
                     </div>
-                    <ChevronDown color="blue" />
+                    <ChevronDown color="white" />
                 </div>
 
                 {/*Dropdown Menu*/}
                 {show && (
                     <div className={`absolute left-0 ${isSticky ? "top-[70px]" : "top-[50px]"} 
-                    w-[260px] h-[400px] bg-[#f5f5f5]`}>
+                    w-[260px] h-[400px] bg-[#3489ff]`}>
 
                     </div>
                 )}
