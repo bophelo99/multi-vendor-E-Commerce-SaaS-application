@@ -245,7 +245,7 @@ const Signup = () => {
                             verifyOtpMutation.error instanceof AxiosError && (
                                 <p className="text-red-500 text-sm mt-2">
                                     {
-                                        verifyOtpMutation.error.response ?.data ?.message || verifyOtpMutatuon.error.message
+                                        verifyOtpMutation.error.response ?.data ?.message || verifyOtpMutation.error.message
                                     }
                                 </p>
                             ) 

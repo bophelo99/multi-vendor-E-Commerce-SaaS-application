@@ -1,6 +1,8 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
 import GoogleButton from "apps/user-ui/src/shared/components/google-button";
+import axios, { AxiosError } from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,9 +25,29 @@ const Login = () => {
 
     const {register, handleSubmit, formState: {errors}} = useForm<FormData>()
 
+    const loginMutaion = useMutation({
+        mutationFn: async(data:FormData) => {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URI}/api/user-login`,
+            data,
+            { withCredentials: true}
+         );
+         return response.data;
+        },
+        onSuccess: (data) => {
+            setSeverError(null);
+            router.push("/");
+        },
+        onError: (error: AxiosError) => {
+            const errorMessage = 
+            (error.response ?.data as {message?: string})?.message ||
+                "Invalid credentials!";
+                setSeverError(errorMessage);
+        },
+    });
+
     //receive data from formdata
     const onSubmit = (data:FormData) => {
-
+        loginMutaion.mutate(data);
     };
 
   return (
@@ -110,8 +132,13 @@ const Login = () => {
                             Forgot Password?
                         </Link>
                     </div>
-                    <button type="submit" className="w-full text-lg cursor-pointer bg-black text-white py-2 rounded-lg">
-                        Login
+                    <button 
+                    type="submit"
+                    disabled={loginMutaion.isPending} 
+                    className="w-full text-lg cursor-pointer bg-black text-white py-2 rounded-lg"
+
+                    >
+                        {loginMutaion ?.isPending ? "Logging in ..." : "Login"}
                     </button>
                     {serverError && (
                         <p className="text-red-500 text-sm mt-2">{serverError}</p>
