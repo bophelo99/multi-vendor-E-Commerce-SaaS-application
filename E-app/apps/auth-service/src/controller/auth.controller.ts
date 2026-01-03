@@ -1,10 +1,11 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, response, Response } from "express";
 import { validateRegistrationData, checkOtpRestrictions, verifyOtp, trackOtpRequests, sendOtp, handleForgotPassword, verifyForgotPasswordOtp } from "../utils/auth.helper";
 import prisma from "@packages/libs/prisma";
 import { AuthError, ValidationError } from "@packages/error-handler";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { setCookie } from "../utils/cookies/setCookie";
+import { decode } from "punycode";
 
 //register a new user (seller or buyer)
 export const userRegistration = async (req: Request, res: Response, next: NextFunction) => {
@@ -108,6 +109,42 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
         return next(error);
     }
 };
+
+//refresh user token
+
+/*
+    
+*/
+export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const refreshToken = req.cookies.refresh_token;
+        if(!refreshToken){
+            throw new ValidationError("Unauthorized! No refr3esh tocken.");
+        }
+        const decoded = jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET as string
+        ) as {id: string; role: string}
+        if(!decoded || !decoded.id || !decoded.role){
+            return new JsonWebTokenError("Forbidden! Invalid refresh token.")
+        }
+            // let account;
+            // if(decoded.role == "user")
+        const user = await prisma.users.findUnique({ where: {id: decoded.id }});
+        if(!user){
+            return new AuthError("Forbidden! User/Seller not found")
+        }
+        const newAccessToken = jwt.sign(
+            { id: decoded.id, role: decoded.role },
+            process.env.ACCESS_TOKEN_SECRET as string,
+            { expiresIn: "15m" }
+        );
+        setCookie(res, "access_token", newAccessToken);
+        return  res.status(201).json({ success: true };)
+    } catch (error){ 
+        return next(error);
+    }
+}
 
 //forgot password controller (send OTP to email to reset password)
 export const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
