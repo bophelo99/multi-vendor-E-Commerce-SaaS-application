@@ -119,7 +119,7 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
     try{
         const refreshToken = req.cookies.refresh_token;
         if(!refreshToken){
-            throw new ValidationError("Unauthorized! No refr3esh tocken.");
+            throw new ValidationError("Unauthorized! No refresh token.");
         }
         const decoded = jwt.verify(
             refreshToken,
@@ -140,7 +140,7 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
             { expiresIn: "15m" }
         );
         setCookie(res, "access_token", newAccessToken);
-        return  res.status(201).json({ success: true };)
+        return  res.status(201).json({ success: true });
     } catch (error){ 
         return next(error);
     }
