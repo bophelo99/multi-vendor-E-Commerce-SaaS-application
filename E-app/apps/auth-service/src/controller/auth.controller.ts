@@ -5,7 +5,6 @@ import { AuthError, ValidationError } from "@packages/error-handler";
 import bcrypt from "bcryptjs";
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { setCookie } from "../utils/cookies/setCookie";
-import { decode } from "punycode";
 
 //register a new user (seller or buyer)
 export const userRegistration = async (req: Request, res: Response, next: NextFunction) => {
@@ -145,6 +144,21 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
         return next(error);
     }
 }
+
+/*
+  Get logged in user details
+*/
+export const getUser = async (req: any, res: Response, next: NextFunction) => {
+    try {
+        const user = req.user;
+        res.status(201).json({
+            success: true,
+            user,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 //forgot password controller (send OTP to email to reset password)
 export const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
