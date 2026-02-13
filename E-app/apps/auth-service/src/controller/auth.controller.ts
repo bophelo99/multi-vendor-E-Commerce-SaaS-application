@@ -1,4 +1,4 @@
-import { NextFunction, Request, response, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { validateRegistrationData, checkOtpRestrictions, verifyOtp, trackOtpRequests, sendOtp, handleForgotPassword, verifyForgotPasswordOtp } from "../utils/auth.helper";
 import prisma from "@packages/libs/prisma";
 import { AuthError, ValidationError } from "@packages/error-handler";
