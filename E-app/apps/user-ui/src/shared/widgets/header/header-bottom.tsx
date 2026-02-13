@@ -2,7 +2,7 @@
 
 import { AlignLeft, ChevronDown } from "lucide-react";
 import React, {useEffect, useState} from "react";
-import {navItems} from "../../../configs/constants";
+import { navItems } from "apps/user-ui/src/configs/constants";
 import Link from "next/link";
 import useUser from "apps/user-ui/src/hooks/useUser";
 

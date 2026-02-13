@@ -116,9 +116,9 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
 */
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const refreshToken = req.cookies.refresh_token;
+        const refreshToken = req.cookies?.refresh_token;
         if(!refreshToken){
-            throw new ValidationError("Unauthorized! No refresh token.");
+            return new ValidationError("Unauthorized! No refresh token.");
         }
         const decoded = jwt.verify(
             refreshToken,
@@ -129,8 +129,10 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
         }
             // let account;
             // if(decoded.role == "user")
-        const user = await prisma.users.findUnique({ where: {id: decoded.id }});
-        if(!user){
+        const user = await prisma.users.findUnique({ 
+            where: {id: decoded.id }
+        });
+        if(!user){ 
             return new AuthError("Forbidden! User/Seller not found")
         }
         const newAccessToken = jwt.sign(
@@ -143,7 +145,7 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
     } catch (error){ 
         return next(error);
     }
-}
+};
 
 /*
   Get logged in user details

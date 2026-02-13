@@ -1,10 +1,10 @@
 import axios from "axios";
 const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_SERVE_URI,
+    baseURL: process.env.NEXT_PUBLIC_SERVER_URI,
     withCredentials: true,
 });
 let isRefreshing = false;
-let refreshSubscirbers: (() => void)[] = [];
+let refreshSubscribers: (() => void)[] = [];
 // Handle logout and prevent infinite loops
 const handleLogout = () => {
     if(window.location.pathname != "/login"){
@@ -13,12 +13,12 @@ const handleLogout = () => {
 };
 //handle adding a new access token to queued requests
 const subscribeTokenRefresh = (callback: () => void) => {
-    refreshSubscirbers.push(callback);
+    refreshSubscribers.push(callback);
 };
 //execute the queued requests after refresh
 const onRefreshSuccess = () => {
-    refreshSubscirbers.forEach((callback) => callback());
-    refreshSubscirbers = [];
+    refreshSubscribers.forEach((callback) => callback());
+    refreshSubscribers = [];
 };
 // Handle API requests
 axiosInstance.interceptors.request.use(
@@ -41,7 +41,7 @@ axiosInstance.interceptors.response.use(
             isRefreshing = true;
             try{
                 await axios.post(
-                    `${process.env.NEXT_PUBLIC_SERVER_URI}/auth/api/refresh-token`,
+                    `${process.env.NEXT_PUBLIC_SERVER_URI}/api/refresh-token-user`,
                     {},
                     { withCredentials: true }
                 );
@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
                 return axiosInstance(originalRequest);
             } catch (error) {
                 isRefreshing = false;
-                refreshSubscirbers = [];
+                refreshSubscribers = [];
                 handleLogout();
                 return Promise.reject(error);
             }
