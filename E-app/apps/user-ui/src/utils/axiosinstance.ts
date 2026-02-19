@@ -7,7 +7,7 @@ let isRefreshing = false;
 let refreshSubscribers: (() => void)[] = [];
 // Handle logout and prevent infinite loops
 const handleLogout = () => {
-    if(window.location.pathname != "/login"){
+    if(window.location.pathname !== "/login"){
         window.location.href = "/login";
     }
 };
@@ -31,7 +31,7 @@ axiosInstance.interceptors.response.use(
     async  (error) => {
         const originalRequest = error.config;
         // prevent infinite retry loop
-        if(error.response?.status == 401 && !originalRequest._retry){ 
+        if(error.response?.status === 401 && !originalRequest._retry){ 
             if(isRefreshing) {
                 return new Promise((resolve) => {
                     subscribeTokenRefresh(() => resolve(axiosInstance(originalRequest)));
@@ -48,11 +48,11 @@ axiosInstance.interceptors.response.use(
                 isRefreshing = false;
                 onRefreshSuccess();
                 return axiosInstance(originalRequest);
-            } catch (error) {
+            } catch (refreshError) {
                 isRefreshing = false;
                 refreshSubscribers = [];
                 handleLogout();
-                return Promise.reject(error);
+                return Promise.reject(refreshError);
             }
         }
         return Promise.reject(error);

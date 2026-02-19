@@ -9,6 +9,7 @@ const swaggerDocument = require('./swagger-output.json');
 
 const app = express();
 
+app.use(cookieParser());
 app.use(cors({
   origin: ["http://localhost:3000"],
   allowedHeaders: [ "Authorization", "Content-Type"],
@@ -16,7 +17,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(cookieParser());
 app.get('/', (req, res) => {
     res.send({ 'message': 'Hello API'});
 });

@@ -141,7 +141,7 @@ const forgotPassword = () => {
         </p>
         <div className="w-full justify-center flex">
             <div className="md:w-[480px] p-8 bg-white shadow rounded-lg">
-              {step == "email" && (
+              {step === "email" && (
                 <>
                     <h3 className="text-3xl text-center mb-2 font-semibold">
                     Login to ShopBay

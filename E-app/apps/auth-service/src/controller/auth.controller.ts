@@ -91,13 +91,13 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
             { expiresIn: "15m", }
         );
 
-        const arefreshToken = jwt.sign(
+        const refreshToken = jwt.sign(
             { id: existingUser.id, role: "user" }, 
             process.env.REFRESH_TOKEN_SECRET as string, 
             { expiresIn: "7d", }
         );
         //store refresh and access token into database in an httponly secure cookie
-        setCookie(res, "refreshToken", arefreshToken);
+        setCookie(res, "refreshToken", refreshToken);
         setCookie(res, "accessToken", accessToken);
 
         res.status(200).json({
@@ -116,7 +116,8 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
 */
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const refreshToken = req.cookies?.refresh_token;
+        const refreshToken = req.cookies.refresh_token;
+        console.log('refreshtoken: ', refreshToken);
         if(!refreshToken){
             return new ValidationError("Unauthorized! No refresh token.");
         }
@@ -127,8 +128,6 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
         if(!decoded || !decoded.id || !decoded.role){
             return new JsonWebTokenError("Forbidden! Invalid refresh token.")
         }
-            // let account;
-            // if(decoded.role == "user")
         const user = await prisma.users.findUnique({ 
             where: {id: decoded.id }
         });
