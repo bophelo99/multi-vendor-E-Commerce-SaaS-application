@@ -43,7 +43,6 @@ const HeaderBottom = () => {
                 {show && (
                     <div className={`absolute left-0 ${isSticky ? "top-[70px]" : "top-[50px]"} 
                     w-[260px] h-[400px] bg-[#3489ff]`}>
-
                     </div>
                 )}
 

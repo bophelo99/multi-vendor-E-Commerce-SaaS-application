@@ -87,6 +87,7 @@ const Signup = () => {
 
     //receive data from formdata
     const onSubmit = (data:FormData) => {
+        console.log(data);
         signupMutation.mutate(data);
     };
 
@@ -105,7 +106,7 @@ const Signup = () => {
 
     //handle backspace to go back into previous otp backspace
     const handleOtpkeyDown = (index:number, e:React.KeyboardEvent<HTMLInputElement>) => {
-        if(e.key == "Backspace" && !otp[index] && index > 0 ){
+        if(e.key === "Backspace" && !otp[index] && index > 0 ){
             inputRefs.current[index - 1]?.focus();
         }
     };
@@ -215,19 +216,20 @@ const Signup = () => {
                     <div>
                         <h3 className="text-xl font-semibold text-center mb-4">Enter verification code</h3>
                         <div className="justify-center flex gap-6">
-                            {otp ?.map((digit,index)=>(
-                                <input key={index} type="text" ref={(el)=> {
+                            {otp ?.map((digit,index) => (
+                                <input key={index} type="text" ref={(el) => {
                                   if (el) inputRefs.current[index] = el;
                                 }}
                                 maxLength={1}
                                 className="w-12 h-12 text-center border border-gray-500 outline-none !rounded"
                                 value={digit}
-                                onChange={(e) => handleOtpChange(index,e.target.value)}
+                                onChange={(e) => handleOtpChange(index, e.target.value)}
                                 onKeyDown={(e) => handleOtpkeyDown(index, e)}
                                 />
                             ))}
                         </div>
-                        <button className="w-full h-12 mt-4 text-lg cursor-pointer bg-blue-500 text-white py-2 rounded-lg"
+                        <button 
+                         className="w-full h-12 mt-4 text-lg cursor-pointer bg-blue-500 text-white py-2 rounded-lg"
                          disabled={verifyOtpMutation.isPending}
                          onClick={() => verifyOtpMutation.mutate()}
                         >
@@ -235,10 +237,12 @@ const Signup = () => {
                         </button>
                         <p className="text-center text-sm mt-4">
                             {canResend ? (
-                                <button onClick={resendOtp} className="text-blue-500 cursor-pointer">
+                                <button 
+                                 onClick={resendOtp} 
+                                 className="text-blue-500 cursor-pointer">
                                     Resend Verification Code
                                 </button>
-                            ):(
+                            ) : (
                                 `Resend OTP in ${timer}s`
                             )}
                         </p>

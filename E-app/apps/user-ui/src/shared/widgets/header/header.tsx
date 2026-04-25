@@ -72,7 +72,7 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            <div className="border-b border-b-slate-200"/>
+            <div className="border-b border-b-[#99999938]"/>
             <HeaderBottom />
         </div>
     );

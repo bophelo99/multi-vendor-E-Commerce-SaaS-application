@@ -116,8 +116,8 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
 */
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const refreshToken = req.cookies.refresh_token;
-        console.log('refreshtoken: ', refreshToken);
+        const refreshToken = req.cookies.refreshToken;
+        console.log('refreshToken: ', refreshToken);
         if(!refreshToken){
             return new ValidationError("Unauthorized! No refresh token.");
         }
@@ -139,7 +139,7 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
             process.env.ACCESS_TOKEN_SECRET as string,
             { expiresIn: "15m" }
         );
-        setCookie(res, "access_token", newAccessToken);
+        setCookie(res, "accessToken", newAccessToken);
         return  res.status(201).json({ success: true });
     } catch (error){ 
         return next(error);
