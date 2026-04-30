@@ -10,7 +10,6 @@ import useUser from 'apps/user-ui/src/hooks/useUser';
 
 const Header = () => {
     const { user, isLoading } = useUser();
-    console.log('User info: ', user);
     return (
         <div className="w-full bg-white">
             <div className="w-[80%] py-5 m-auto flex items-center justify-between">
@@ -36,9 +35,9 @@ const Header = () => {
                                 >
                                    <ProfileIcon />
                                 </Link>
-                                <Link href={"/login"}>
+                                <Link href={"/profile"}>
                                    <span className="block font-medium">Hello,</span>
-                                   <span className="font-semibold">{user?.name}</span>
+                                   <span className="font-semibold">{user?.name.split(" ")[0]}</span>
                                 </Link>
                             </>
                         ) : (
@@ -50,7 +49,7 @@ const Header = () => {
                                 </Link>
                                 <Link href={"/login"}>
                                 <span className="block font-medium">Hello</span>
-                                <span className="block font-semibold">Sign In</span>
+                                <span className="block font-semibold">{isLoading ? "..." : "Sign In" }</span>
                                 </Link>
                             </>
                         )}
